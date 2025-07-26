@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="https://i.imgur.com/e4oXN9E.png" type="image/png">
+  <title>BigNova_Dev Productions | Crop Aphasia</title>
+  <style>
+    body {
+      font-family: 'Merriweather', serif;
+      background-color: #f5f2e7;
+      margin: 0;
+      padding: 20px;
+      color: #3e372d;
+    }
+
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 40px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-family: 'Luckiest Guy', cursive;
+      color: #6b4c3b;
+      margin: 0;
+    }
+
+    .shop-btn {
+      background-color: #a4703b;
+      color: #fff8e1;
+      padding: 12px 24px;
+      border: 3px solid #6b4c3b;
+      border-radius: 10px;
+      font-weight: bold;
+      font-family: 'Luckiest Guy', cursive;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+      cursor: pointer;
+    }
+
+    .shop-btn:hover {
+      background-color: #8b5a2b;
+    }
+
+    .coins-display {
+      font-size: 17px;
+      font-weight: bold;
+      font-family: 'Luckiest Guy', cursive;
+    }
+
+    .farm-box {
+      background-color: rgb(125, 100, 75);
+      border: 5px solid #8b5a2b;
+      border-radius: 12px;
+      padding: 20px;
+      min-height: 300px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      height: calc(100vh - 120px);
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+
+    .plant-emoji {
+      font-size: 40px;
+      cursor: pointer;
+      transition: transform 0.5s ease;
+      display: block;
+      text-align: center;
+      width: 100%;
+    }
+
+    .shop, .overlay {
+      display: none;
+    }
+
+    .shop {
+      background-color: #fff;
+      border: 3px dashed #a4703b;
+      padding: 20px;
+      border-radius: 15px;
+      position: fixed;
+      top: 10%;
+      left: 25%;
+      width: 50%;
+      z-index: 10;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.4);
+      z-index: 5;
+    }
+
+    .plant {
+      background-color: #ffeccb;
+      border: 2px solid #cfa768;
+      padding: 10px;
+      margin-bottom: 8px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .progress-container {
+      width: 60px;
+      background-color: #eee;
+      border-radius: 10px;
+      margin-top: 5px;
+    }
+
+    .progress-bar {
+      height: 10px;
+      width: 0%;
+      background-color: #88c057;
+      border-radius: 10px;
+      transition: width 1s ease;
+    }
+
+    .popup {
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #fff4c2;
+      color: #3e372d;
+      padding: 12px 24px;
+      border: 2px solid #a4703b;
+      border-radius: 10px;
+      font-weight: bold;
+      z-index: 20;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .popup.show {
+      opacity: 1;
+    }
+
+    .shop-scroll {
+      max-height: 300px; /* adjust height to fit your design */
+      overflow-y: auto;
+      padding: 10px;
+      border: 3px dashed #a4703b;
+      border-radius: 15px;
+      background: #F5FFFA;
+    }
+    .crop-item {
+      margin-bottom: 10px;
+      padding: 8px;
+      background: #FFF8DC;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>🌾 Crop Aphasia</h1>
+    <button class="shop-btn" onclick="openShop()">🌱 Shop</button>
+    <div class="coins-display">💰 Coins: <span id="coins">1</span></div>
+  </div>
+
+  <div class="farm-box" id="farm"></div>
+
+  <div class="overlay" onclick="closeShop()"></div>
+
+  <div class="shop">
+    <h2>🌱 Shop</h2>
+    <div class="shop-scroll">
+      <div class="plant" onclick="buyPlant('🌾')">🌾 Wheat – 1 coin</div>
+      <div class="plant" onclick="buyPlant('🥕')">🥕 Carrot – 25 coins</div>
+      <div class="plant" onclick="buyPlant('🌽')">🌽 Corn – 300 coins</div>
+      <div class="plant" onclick="buyPlant('🍅')">🍅 Tomato – 1,200 coins</div>
+      <div class="plant" onclick="buyPlant('🍎')">🍎 Apple – 2,500 coins</div>
+      <div class="plant" onclick="buyPlant('🍆')">🍆 Eggplant – 7,500 coins</div>
+      <div class="plant" onclick="buyPlant('🥔')">🥔 Potato – 15,000 coins</div>
+      <div class="plant" onclick="buyPlant('🥭')">🥭 Mango – 35,000 coins</div>
+      <div class="plant" onclick="buyPlant('🍊')">🍊 Orange – 75,000 coins</div>
+      <div class="plant" onclick="buyPlant('🍋')">🍋 Lemon – 125,000 coins</div>
+      <div class="plant" onclick="buyPlant('🍈')">🍈 Melon – 200,000 coins</div>
+      <div class="plant" onclick="buyPlant('🍐')">🍐 Pear – 750,000 coins</div>
+      <div class="plant" onclick="buyPlant('🍒')">🍒 Cherry – 1,500,000 coins</div>
+      <div class="plant" onclick="buyPlant('🍓')">🍓 Strawberry – 3,500,000 coins</div>
+      <div class="plant" onclick="buyPlant('🫐')">🫐 Blueberry – 7,500,000 coins</div>
+      <div class="plant" onclick="buyPlant('🫛')">🫛 Pea – 15,000,000 coins</div>
+      <div class="plant" onclick="buyPlant('🍄')">🍄 Red Mushroom – 25,000,000 coins</div>
+      <div class="plant" onclick="buyPlant('🍇')">🍇 Grapes – 55,000,000 coins</div>
+      <div class="plant" onclick="buyPlant('🫑')">🫑 Pepper – 115,000,000 coins</div>
+      <div class="plant" onclick="buyPlant('🍉')">🍉 Watermelon – 250,000,000 coins</div>
+      <div class="plant" onclick="buyPlant('🍌')">🍌 Banana – 780,000,000 coins</div>
+      <div class="plant" onclick="buyPlant('🍍')">🍍 Pineapple – 1,200,000,000 coins</div>
+      <div class="plant" onclick="buyPlant('🌶️')">🌶️ Chili Pepper – 3,000,000,000 coins</div>
+    </div>
+    <br>
+    <button class="shop-btn" onclick="closeShop()">Close Shop</button>
+  </div>
+
+  <div id="popup" class="popup"></div>
+
+  <script>
+    let coins = 1;
+
+    const plantPrices = {
+      '🌾': 1,
+      '🥕': 25,
+      '🌽': 300,
+      '🍅': 1200,
+      '🍎': 2500,
+      '🍆': 7500,
+      '🥔': 15000,
+      '🥭': 35000,
+      '🍊': 75000,
+      '🍋': 125000,
+      '🍈': 200000,
+      '🍐': 750000,
+      '🍒': 1500000,
+      '🍓': 3500000,
+      '🫐': 7500000,
+      '🫛': 15000000,
+      '🍄': 25000000,
+      '🍇': 55000000,
+      '🫑': 115000000,
+      '🍉': 250000000,
+      '🍌': 780000000,
+      '🍍': 1200000000,
+      '🌶️': 3000000000
+    };
+
+    const harvestRewards = {
+      '🌾': 2,
+      '🥕': 30,
+      '🌽': 325,
+      '🍅': 1300,
+      '🍎': 2750,
+      '🍆': 8000,
+      '🥔': 16000,
+      '🥭': 37500,
+      '🍊': 80000,
+      '🍋': 135000,
+      '🍈': 225000,
+      '🍐': 800000,
+      '🍒': 1750000,
+      '🍓': 4000000,
+      '🫐': 8500000,
+      '🫛': 16000000,
+      '🍄': 27500000,
+      '🍇': 60000000,
+      '🫑': 125000000,
+      '🍉': 275000000,
+      '🍌': 825000000,
+      '🍍': 1400000000,
+      '🌶️': 3500000000
+    };
+
+    function updateCoins() {
+      document.getElementById('coins').textContent = coins.toLocaleString();
+    }
+
+    function openShop() {
+      document.querySelector('.shop').style.display = 'block';
+      document.querySelector('.overlay').style.display = 'block';
+    }
+
+    function closeShop() {
+      document.querySelector('.shop').style.display = 'none';
+      document.querySelector('.overlay').style.display = 'none';
+    }
+
+    function buyPlant(emoji) {
+      const cost = plantPrices[emoji];
+      if (coins >= cost) {
+        coins -= cost;
+        updateCoins();
+        plantInFarm(emoji);
+        showPopup(`${emoji} planted! 🌱`);
+        closeShop();
+      } else {
+        showPopup("Oops! Not enough coins.");
+      }
+    }
+
+    function plantInFarm(emoji) {
+      const farm = document.getElementById('farm');
+      const container = document.createElement('div');
+
+      const plant = document.createElement('div');
+      plant.className = 'plant-emoji';
+      plant.textContent = emoji;
+
+      const progressContainer = document.createElement('div');
+      progressContainer.className = 'progress-container';
+
+      const bar = document.createElement('div');
+      bar.className = 'progress-bar';
+      progressContainer.appendChild(bar);
+
+      container.appendChild(plant);
+      container.appendChild(progressContainer);
+      farm.appendChild(container);
+
+      let progress = 0;
+      const growInterval = setInterval(() => {
+        progress += 10;
+        bar.style.width = progress + '%';
+        if (progress >= 100) {
+          clearInterval(growInterval);
+          plant.onclick = () => harvestCrop(container, emoji);
+        }
+      }, 300);
+    }
+
+    function harvestCrop(container, emoji) {
+      coins += harvestRewards[emoji];
+      updateCoins();
+      container.remove();
+      showPopup(`${emoji} harvested! 💰 +${harvestRewards[emoji]} coins`);
+    }
+
+    function showPopup(message) {
+      const popup = document.getElementById('popup');
+      popup.textContent = message;
+      popup.classList.add('show');
+      setTimeout(() => {
+        popup.classList.remove('show');
+      }, 2000);
+    }
+  </script>
+</body>
+</html>
