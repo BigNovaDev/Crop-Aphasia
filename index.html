@@ -322,7 +322,7 @@
       coins += harvestRewards[emoji];
       updateCoins();
       container.remove();
-      showPopup(`${emoji} harvested! 💰 +${harvestRewards[emoji]} coins`);
+      showPopup(`${emoji} harvested! 💰 +${harvestRewards[emoji].toLocalString()} coins`);
     }
 
     function showPopup(message) {
